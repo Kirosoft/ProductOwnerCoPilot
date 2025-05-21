@@ -1,0 +1,14 @@
+[Unit]
+Description=Product Owner Copilot (FastAPI/Ollama)
+After=network.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/productowner3
+ExecStart=/home/ubuntu/productowner3/.venv/bin/uvicorn main:app --host 0.0.0.0 --port 8000
+EnvironmentFile=/home/ubuntu/productowner3/.env
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
