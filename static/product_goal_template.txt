@@ -1,0 +1,25 @@
+<ProductGoal>
+Goal Statement*
+
+As a product owner, I want to define a clear product goal so that the team has a shared understanding of what we are trying to achieve.
+
+Description*
+
+The product goal provides direction and focus for the team. It should be specific, measurable, achievable, relevant, and time-bound (SMART). The goal should align with the overall product vision and strategy.
+
+Business Value / Rationale*
+
+A well-defined product goal helps the team prioritize work, make better decisions, and measure progress. It also ensures that everyone is working towards the same objective.
+
+Outline Tasks (optional)
+- Define the product goal statement.
+- Ensure alignment with product vision and strategy.
+- Communicate the goal to all stakeholders.
+- Break down the goal into actionable PBIs.
+- Review and adjust the goal as needed.
+
+Acceptance Criteria
+
+Given the product vision and strategy, when the product goal is defined, then the team should have a clear understanding of what needs to be achieved and how success will be measured.
+Given the product goal, when PBIs are created, then they should directly contribute to achieving the goal.
+</ProductGoal>

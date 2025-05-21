@@ -1,0 +1,32 @@
+<PBI>
+User Story*
+
+As an integration engineer, I want to rename the environments in Elastic Cloud configurations so that they match the Hosted Logstash Configurations.
+
+Description*
+
+Currently, the naming convention for Elastic Cloud environments (Live and NonLive) does not align with the Hosted Logstash Configurations. This can cause confusion, especially when managing integrations that use Logstash. To resolve this, we will rename "NonLive" to "Test" and update "Test" to become the new "NonLive". This change will ensure consistency across environments and reduce potential misconfigurations.
+
+Business Value / Rationale*
+
+This PBI is important because it eliminates confusion and ensures that all integrations using Logstash are correctly aligned with their respective environments. This alignment will improve reliability, reduce errors, and streamline the management of hosted configurations in GitHub.
+
+Outline Tasks (optional)
+- Update environment names in Elastic Cloud configurations.
+- Rename "NonLive" to "Test".
+- Rename "Test" to "NonLive".
+- Verify that all integrations using Logstash are correctly aligned with the new environment names.
+- Document the changes and update any relevant documentation or links.
+
+Test Notes (optional)
+
+We will test this by:
+1. Verifying that the environment names in Elastic Cloud configurations have been updated correctly.
+2. Ensuring that all integrations using Logstash are functioning as expected in their respective environments.
+3. Confirming that there is no confusion regarding the new naming convention and that it aligns with the Hosted Logstash Configurations.
+
+Acceptance criteria
+
+Given the environment names in Elastic Cloud configurations, when they are updated to match the Hosted Logstash Configurations, then all integrations using Logstash should function correctly.
+Given a user managing hosted configurations in GitHub, when they see the new environment names, then there should be no confusion regarding which environment is which.
+</PBI>
