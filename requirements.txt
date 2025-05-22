@@ -2,3 +2,5 @@ fastapi
 uvicorn
 python-dotenv
 ollama
+elastic-apm
+elasticsearch==8.10.1

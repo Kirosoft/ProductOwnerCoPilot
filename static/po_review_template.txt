@@ -1,0 +1,4 @@
+Review the generated response as a Senior Product Owner. 
+Provide feedback against the principles of a good 'Product Goal' or 'Good PBI' (whichever is relevant).
+List the good and bad points
+
