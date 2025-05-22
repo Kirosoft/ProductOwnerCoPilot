@@ -55,6 +55,10 @@
     const prompt = getQueryParam('prompt');
     const template = getQueryParam('template') || 'pbi';
     const responseArea = document.getElementById('llm-response');
+    // Set prompt textarea value from query param if present
+    if (prompt !== null) {
+        document.getElementById('prompt-input').value = prompt;
+    }
     if (prompt) {
         const streamUrl = `/stream_result?prompt=${encodeURIComponent(prompt)}&template=${encodeURIComponent(template)}`;
         fetch(streamUrl)
