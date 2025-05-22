@@ -17,6 +17,7 @@
         <label for="prompt-input">Enter your prompt:</label><br>
         <textarea id="prompt-input" name="prompt" rows="4" style="width:100%;"></textarea><br>
         <button type="submit">Submit</button>
+        <button type="button" id="clear-btn">Clear</button>
     </form>
     <h2>LLM Response:</h2>
     <div id="llm-response-area" class="llm-response">
@@ -33,8 +34,17 @@
         const prompt = document.getElementById('prompt-input').value;
         const template = document.getElementById('template-select').value;
         if (prompt) {
+            // Do not clear the prompt field
             window.location.search = '?prompt=' + encodeURIComponent(prompt) + '&template=' + encodeURIComponent(template);
         }
+    });
+
+    // Add Clear button functionality
+    document.getElementById('clear-btn').addEventListener('click', function() {
+        document.getElementById('prompt-input').value = '';
+        document.getElementById('llm-response').value = '';
+        // Optionally, remove query params from URL
+        window.history.replaceState({}, document.title, window.location.pathname);
     });
 
     // Handle streaming fetch on page load if prompt is present
