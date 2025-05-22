@@ -144,13 +144,7 @@ class ElasticsearchHandler(logging.Handler):
 ES_INDEX_NAME = os.getenv("ES_INDEX_NAME")
 ES_CLOUD_ID = os.getenv("ES_CLOUD_ID")
 ES_API_KEY = os.getenv("ES_API_KEY")
-# Debug output for ES credentials
-print(f"[DEBUG] ES_INDEX_NAME: {ES_INDEX_NAME}")
-print(f"[DEBUG] ES_CLOUD_ID: {ES_CLOUD_ID}")
-if ES_API_KEY:
-    print(f"[DEBUG] ES_API_KEY: {ES_API_KEY[:4]}...{'*' * (len(ES_API_KEY)-8)}...{ES_API_KEY[-4:]}")
-else:
-    print("[DEBUG] ES_API_KEY: None")
+
 if ES_INDEX_NAME and ES_CLOUD_ID and ES_API_KEY:
     es_client = Elasticsearch(
         cloud_id=ES_CLOUD_ID,
