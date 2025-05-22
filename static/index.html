@@ -18,6 +18,7 @@
         <textarea id="prompt-input" name="prompt" rows="4" style="width:100%;"></textarea><br>
         <button type="submit">Submit</button>
         <button type="button" id="clear-btn">Clear</button>
+        <button type="button" id="cancel-btn" disabled>Cancel</button>
     </form>
     <h2>LLM Response:</h2>
     <div id="llm-response-area" class="llm-response">
@@ -47,6 +48,17 @@
         window.history.replaceState({}, document.title, window.location.pathname);
     });
 
+    let abortController = null;
+    const cancelBtn = document.getElementById('cancel-btn');
+
+    // Add Cancel button functionality
+    cancelBtn.addEventListener('click', function() {
+        if (abortController) {
+            abortController.abort();
+            cancelBtn.disabled = true;
+        }
+    });
+
     // Handle streaming fetch on page load if prompt is present
     function getQueryParam(name) {
         const urlParams = new URLSearchParams(window.location.search);
@@ -61,10 +73,13 @@
     }
     if (prompt) {
         const streamUrl = `/stream_result?prompt=${encodeURIComponent(prompt)}&template=${encodeURIComponent(template)}`;
-        fetch(streamUrl)
+        abortController = new AbortController();
+        cancelBtn.disabled = false;
+        fetch(streamUrl, { signal: abortController.signal })
             .then(response => {
                 if (!response.body) {
                     responseArea.value = 'No response body.';
+                    cancelBtn.disabled = true;
                     return;
                 }
                 const reader = response.body.getReader();
@@ -72,21 +87,35 @@
                 responseArea.value = '';
                 function read() {
                     reader.read().then(({ done, value }) => {
-                        if (done) return;
+                        if (done) {
+                            cancelBtn.disabled = true;
+                            return;
+                        }
                         responseArea.value += decoder.decode(value, { stream: true });
                         responseArea.scrollTop = responseArea.scrollHeight;
                         read();
                     }).catch(err => {
-                        responseArea.value += '\n[Stream error: ' + err + ']';
+                        if (err.name === 'AbortError') {
+                            responseArea.value += '\n[Stream cancelled by user]\n';
+                        } else {
+                            responseArea.value += '\n[Stream error: ' + err + ']';
+                        }
+                        cancelBtn.disabled = true;
                     });
                 }
                 read();
             })
             .catch(err => {
-                responseArea.value = '[Fetch error: ' + err + ']';
+                if (err.name === 'AbortError') {
+                    responseArea.value = '[Fetch cancelled by user]';
+                } else {
+                    responseArea.value = '[Fetch error: ' + err + ']';
+                }
+                cancelBtn.disabled = true;
             });
     } else {
         responseArea.value = '';
+        cancelBtn.disabled = true;
     }
     </script>
 </body>
