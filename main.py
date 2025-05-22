@@ -34,7 +34,7 @@ async def stream_result(prompt: str, template: str = "pbi"):
         async def error_stream():
             yield "Error: template file not found."
         return StreamingResponse(error_stream(), media_type="text/plain")
-    ollama_prompt = f"Using the following template:\n---\n{template_content}\n---\nFill in the details based on this information:\n---\n{prompt}\n---"
+    ollama_prompt = f"As an expert product owner use the following template:\n---\n{template_content}\n---\nFill in the details based on this information:\n---\n{prompt}\n---"
     messages = [{"role": "user", "content": ollama_prompt}]
     async def stream_generator():
         payload = {

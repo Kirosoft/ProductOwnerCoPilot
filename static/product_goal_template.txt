@@ -1,25 +1,42 @@
-<ProductGoal>
-Goal Statement*
+#Goal
 
-As a product owner, I want to define a clear product goal so that the team has a shared understanding of what we are trying to achieve.
+What is the desired outcome? What are you trying to achieve? As short as possible. One sentence. 
 
-Description*
+Consider adding with this format as well: 
 
-The product goal provides direction and focus for the team. It should be specific, measurable, achievable, relevant, and time-bound (SMART). The goal should align with the overall product vision and strategy.
+So that {{outcome}} 
+For {{user persona}} 
+We will {{provide a solution}} 
+Whereas {{current situation}}
 
-Business Value / Rationale*
+#Users & customers 
 
-A well-defined product goal helps the team prioritize work, make better decisions, and measure progress. It also ensures that everyone is working towards the same objective.
+Who is affected by this change? What are their needs and current pain points? 
 
-Outline Tasks (optional)
-- Define the product goal statement.
-- Ensure alignment with product vision and strategy.
-- Communicate the goal to all stakeholders.
-- Break down the goal into actionable PBIs.
-- Review and adjust the goal as needed.
+#Vison 
 
-Acceptance Criteria
+Defining a vision too early in the process can be dangerous... if you really don’t know what your future will look like, leave this blank and return to it later. 
 
-Given the product vision and strategy, when the product goal is defined, then the team should have a clear understanding of what needs to be achieved and how success will be measured.
-Given the product goal, when PBIs are created, then they should directly contribute to achieving the goal.
-</ProductGoal>
+But sometimes, it can be helpful to describe your vision of the future, as a means of setting direction. But be open to refining or pivoting as you learn more. 
+
+#Context 
+
+What has happened to lead us to this point? What is the current situation? 
+
+#Problem to be solved 
+
+What is our motivation for doing this? How is it valuable to customers / users / the business? 
+
+Who is affected? When does this issue occur? Where is the impact felt? 
+
+What work has been done to learn about the user need? Link to evidenced. 
+
+#Risks 
+Guidance notes
+
+#Value: benefits 
+
+Benefits to customer and business? E.g. improve quality, improve efficiency, reduce cost, meet regulatory requirements, generate revenue, reduce risk etc. 
+
+#Value: Measures
+How will we know if this initiative has had a positive impact?
