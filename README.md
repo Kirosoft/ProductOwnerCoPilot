@@ -5,9 +5,12 @@ Product Owner Copilot is a FastAPI-based web app for product owners to generate 
 ## Features
 - Select between PBI and Product Goal templates
 - Enter your own prompt and stream the LLM response live
-- Model selection via `.env` (`LLM_MODEL`)
+- Automatic review process: LLM output is reviewed using a second template and streamed to a second textarea
+- Model and template selection via `.env` (`LLM_MODEL`, `PBI_TEMPLATE_PATH`, `PRODUCT_GOAL_TEMPLATE_PATH`, `PO_REVIEW_TEMPLATE`)
+- Ollama API URL configurable via `.env` (`OLLAMA_API_URL`)
 - FastAPI backend with `/stream_result` endpoint for true streaming
-- Simple, modern HTML frontend with word-wrapped textarea
+- Simple, modern HTML frontend with dual word-wrapped textareas (LLM Response & Review)
+- Elastic APM and generic Elasticsearch logging integration (configurable via `.env`)
 
 ## Getting Started
 
@@ -63,16 +66,18 @@ To run Product Owner Copilot as a background service on Ubuntu:
 
 ## Project Structure
 - `main.py` — FastAPI backend
-- `static/index.html` — Main web UI
+- `static/index.html` — Main web UI (with dual textarea: LLM Response & Review)
 - `static/pbi_template.txt` — PBI prompt template
 - `static/product_goal_template.txt` — Product Goal prompt template
+- `static/po_review_template.txt` — Review prompt template
 - `static/style.css` — Stylesheet
-- `.env` — Model selection
+- `.env` — Model, template, Ollama API, and logging configuration
 
 ## Notes
 - Requires Ollama to be running and the model to be pulled.
 - For best streaming, use Uvicorn (not Flask or WSGI).
 - All code and UI are designed for easy extension and customization.
+- Elastic APM and Elasticsearch logging are supported. Set `ELASTIC_APM_*` and `ES_*` variables in `.env` to enable telemetry and log shipping.
 
 ---
 

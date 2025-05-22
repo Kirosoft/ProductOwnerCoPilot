@@ -28,3 +28,9 @@ Given [context], when [action is taken], then [expected outcome]
 Given [context], when [action is taken], then [expected outcome]
 [or write them more plainly like 'user can do x']
 
+#Threat model
+
+Evaluate what is being built
+* how it might be attacked
+* What could go wrong
+* How to mitigate these Risks
