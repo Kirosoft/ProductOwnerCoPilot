@@ -4,10 +4,10 @@ What is the desired outcome? What are you trying to achieve? As short as possibl
 
 Consider adding with this format as well: 
 
-So that {{outcome}} 
-For {{user persona}} 
-We will {{provide a solution}} 
-Whereas {{current situation}}
+So that [outcome]
+For [user persona]
+We will [provide a solution]
+Whereas [current situation]
 
 #Users & customers 
 
@@ -39,4 +39,5 @@ Guidance notes
 Benefits to customer and business? E.g. improve quality, improve efficiency, reduce cost, meet regulatory requirements, generate revenue, reduce risk etc. 
 
 #Value: Measures
+
 How will we know if this initiative has had a positive impact?

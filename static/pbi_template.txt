@@ -1,27 +1,30 @@
-ser Story*
+#User Story
 
-As a {{user type}}, I want {{feature}} so that {{benefit/value}}.
+As a [user type], I want [feature] so that [benefit/value].
 
-Description*
+#Description
 
-{{Add context, background, links to designs, documents, or related discussions.}}
+Add context, background, links to designs, documents, or related discussions.
 
+#Business Value / Rationale
 
-Business Value / Rationale*
+Explain why this PBI is important and what value it delivers.
 
-{{Explain why this PBI is important and what value it delivers.}}
+#Outline Tasks (optional)
 
-Outline Tasks (optional)
-{{We can create task in AzDO just in time, but it can be helpful to make notes here as an aide-mémoire}}
+We can create task in AzDO just in time, but it can be helpful to make notes here as an aide-mémoire
 
-Test Notes (optional)
+#Test Notes (optional)
 
-{{how do we plan to test that this is working as expected?}}
+[how do we plan to test that this is working as expected?]
 
-*Definition of Ready for Refinement: these fields need to be filled-in before we can start refinement.
+#Definition of Ready for Refinement: 
 
-Acceptance criteria
+these fields need to be filled-in before we can start refinement.
 
-Given {{context}}, when {{action is taken}}, then {{expected outcome}}
-Given {{context}}, when {{action is taken}}, then {{expected outcome}}
+#Acceptance criteria
+
+Given [context], when [action is taken], then [expected outcome]
+Given [context], when [action is taken], then [expected outcome]
 [or write them more plainly like 'user can do x']
+
