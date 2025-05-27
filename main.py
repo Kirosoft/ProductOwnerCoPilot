@@ -2,12 +2,13 @@ import os
 import json
 import httpx
 import logging
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.responses import StreamingResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from dotenv import load_dotenv
 from datetime import datetime
 from elasticsearch import Elasticsearch
+import aiofiles
 
 # Elastic APM setup
 try:
@@ -50,9 +51,21 @@ logger = logging.getLogger("product-owner-copilot")
 
 OLLAMA_MODEL = os.getenv("LLM_MODEL", "mistral-small:latest")
 OLLAMA_API_URL = os.getenv("OLLAMA_API_URL", "http://localhost:11434/api/generate")
+LLM_STATUS_FILE = "llm.status"
 
 def convert_messages_to_prompt(messages):
     return "\n".join([m["content"] for m in messages if m["role"] == "user"])
+
+async def is_llm_offline():
+    try:
+        async with aiofiles.open(LLM_STATUS_FILE, mode="r", encoding="utf-8") as f:
+            status = (await f.read()).strip().lower()
+            return "offline" in status
+    except FileNotFoundError:
+        return False
+    except Exception as e:
+        logger.error(f"Error reading LLM status file: {e}")
+        return False
 
 @app.get("/", response_class=HTMLResponse)
 async def index():
@@ -61,6 +74,10 @@ async def index():
 
 @app.get("/stream_result")
 async def stream_result(prompt: str, template: str = "pbi"):
+    if await is_llm_offline():
+        async def offline_stream():
+            yield "LLM is offline"
+        return StreamingResponse(offline_stream(), media_type="text/plain")
     logger.info(f"Received prompt for template '{template}'")
     pbi_template_path = os.getenv("PBI_TEMPLATE_PATH", "static/pbi_template.txt")
     product_goal_template_path = os.getenv("PRODUCT_GOAL_TEMPLATE_PATH", "static/product_goal_template.txt")
@@ -108,6 +125,20 @@ async def stream_result(prompt: str, template: str = "pbi"):
             logger.error(f"HTTPX error: {str(e)}")
             yield f"\n[HTTPX error: {str(e)}]\n"
     return StreamingResponse(stream_generator(), media_type="text/plain")
+
+@app.post("/api/azdo-process")
+async def AZDO_process(request: Request):
+    if await is_llm_offline():
+        return {"error": "LLM is offline"}
+    data = await request.json()
+    logger.info(f"Received AZDO process request: {data}")
+    # Process the request data as needed
+    return {"status": "success", "data": data}
+
+@app.get("/llm_status")
+async def llm_status():
+    offline = await is_llm_offline()
+    return {"status": "offline" if offline else "online"}
 
 # Elasticsearch logging handler
 class ElasticsearchHandler(logging.Handler):
