@@ -2,8 +2,8 @@ import os
 import json
 import httpx
 import logging
-from fastapi import FastAPI, Request
-from fastapi.responses import StreamingResponse, HTMLResponse
+from fastapi import FastAPI, Request, Form
+from fastapi.responses import StreamingResponse, HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from dotenv import load_dotenv
 from datetime import datetime
@@ -96,7 +96,28 @@ async def stream_result(prompt: str, template: str = "pbi"):
         async def error_stream():
             yield "Error: template file not found."
         return StreamingResponse(error_stream(), media_type="text/plain")
-    ollama_prompt = f"As an expert product owner in the observability team, use the following template:\n---\n{template_content}\n---\nFill in the details based on this information:\n---\n{prompt}\n---"
+    # Replace {{prompt}} in template with user input
+    ollama_prompt = template_content.replace("{{prompt}}", prompt)
+    # For review template, replace {{prompt_response}} with the LLM response (if present)
+    if template == "po_review":
+        # Try to get the LLM response from a query param or special marker
+        from fastapi import Query
+        from fastapi import Request
+        # If the prompt looks like a JSON string with a 'llm_response' field, use that
+        import ast
+        llm_response = None
+        try:
+            # Try to parse as JSON
+            parsed = json.loads(prompt)
+            if isinstance(parsed, dict) and "llm_response" in parsed:
+                llm_response = parsed["llm_response"]
+        except Exception:
+            llm_response = None
+        if not llm_response:
+            llm_response = prompt
+        ollama_prompt = ollama_prompt.replace("{{prompt_response}}", llm_response)
+    else:
+        ollama_prompt = ollama_prompt.replace("{{prompt_response}}", prompt)
     messages = [{"role": "user", "content": ollama_prompt}]
     async def stream_generator():
         payload = {
@@ -139,6 +160,41 @@ async def AZDO_process(request: Request):
 async def llm_status():
     offline = await is_llm_offline()
     return {"status": "offline" if offline else "online"}
+
+@app.get("/edit_template", response_class=HTMLResponse)
+async def edit_template():
+    with open("static/edit_template.html", "r", encoding="utf-8") as f:
+        return f.read()
+
+@app.get("/api/get_template")
+async def get_template(template: str):
+    template_map = {
+        "pbi": os.getenv("PBI_TEMPLATE_PATH", "static/pbi_template.txt"),
+        "product_goal": os.getenv("PRODUCT_GOAL_TEMPLATE_PATH", "static/product_goal_template.txt"),
+        "po_review": os.getenv("PO_REVIEW_TEMPLATE", "static/po_review_template.txt"),
+    }
+    path = template_map.get(template)
+    if not path or not os.path.exists(path):
+        return JSONResponse({"error": "Template not found."}, status_code=404)
+    async with aiofiles.open(path, mode="r", encoding="utf-8") as f:
+        content = await f.read()
+    return {"content": content}
+
+@app.post("/api/save_template")
+async def save_template(data: dict):
+    template = data.get("template")
+    content = data.get("content")
+    template_map = {
+        "pbi": os.getenv("PBI_TEMPLATE_PATH", "static/pbi_template.txt"),
+        "product_goal": os.getenv("PRODUCT_GOAL_TEMPLATE_PATH", "static/product_goal_template.txt"),
+        "po_review": os.getenv("PO_REVIEW_TEMPLATE", "static/po_review_template.txt"),
+    }
+    path = template_map.get(template)
+    if not path:
+        return JSONResponse({"error": "Template not found."}, status_code=404)
+    async with aiofiles.open(path, mode="w", encoding="utf-8") as f:
+        await f.write(content)
+    return {"status": "success"}
 
 # Elasticsearch logging handler
 class ElasticsearchHandler(logging.Handler):

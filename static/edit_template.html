@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit LLM Template</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body { max-width: 700px; margin: 2em auto; font-family: sans-serif; }
+        textarea { width: 100%; min-height: 300px; font-family: monospace; }
+        select, button { margin-top: 1em; }
+        #status { margin-top: 1em; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button onclick="window.location.href='/'" style="margin-bottom:10px">&larr; Back</button>
+        <h2>Edit Prompt Template</h2>
+        <label for="template-select">Select Template:</label>
+        <select id="template-select">
+            <option value="pbi">PBI</option>
+            <option value="product_goal">Product Goal</option>
+            <option value="po_review">PO Review</option>
+        </select>
+        <textarea id="template-content" rows="20" cols="80" style="width:100%;margin-top:10px;"></textarea>
+        <button id="save-btn">Save</button>
+        <span id="save-status" style="margin-left:10px;"></span>
+    </div>
+    <script>
+        async function loadTemplate(template) {
+            const resp = await fetch(`/api/get_template?template=${template}`);
+            if (resp.ok) {
+                const data = await resp.json();
+                document.getElementById('template-content').value = data.content;
+            } else {
+                document.getElementById('template-content').value = 'Error loading template.';
+            }
+        }
+        async function saveTemplate(template, content) {
+            const resp = await fetch('/api/save_template', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ template, content })
+            });
+            const status = document.getElementById('save-status');
+            if (resp.ok) {
+                status.textContent = 'Saved!';
+                setTimeout(() => status.textContent = '', 1500);
+            } else {
+                status.textContent = 'Save failed!';
+            }
+        }
+        document.getElementById('template-select').addEventListener('change', function() {
+            loadTemplate(this.value);
+        });
+        document.getElementById('save-btn').addEventListener('click', function() {
+            const template = document.getElementById('template-select').value;
+            const content = document.getElementById('template-content').value;
+            saveTemplate(template, content);
+        });
+        // Load default template on page load
+        window.onload = function() {
+            loadTemplate(document.getElementById('template-select').value);
+        };
+    </script>
+</body>
+</html>

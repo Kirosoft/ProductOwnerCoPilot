@@ -1,3 +1,5 @@
+As a product owner use the {{prompt}} to create the Product Goal using the template below:
+
 #Goal
 
 What is the desired outcome? What are you trying to achieve? As short as possible. One sentence. 
